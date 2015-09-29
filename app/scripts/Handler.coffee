@@ -4,8 +4,8 @@ define [], ->
       @_initialCoordsString = null
 
       #apply classes for handler
-      @element[0].addClass('handler-visible')
       @element[1].addClass('handler-area')
+      @element[0].addClass('handler-visible')
 
       #apply drag functionality
       @element.drag @_move, @_start, @_stop
@@ -14,15 +14,15 @@ define [], ->
       @returnToStart = off
 
       #init transform
-      @draw x: 0, y: 0
+      @draw 0, 0
 
       #events
       @onHandlerStart = null
       @onHandlerStop = null
       @onHandlerMove = null
 
-    draw:(coords)->
-      @element.transform "t #{coords.x}, #{coords.y}"
+    draw:(x, y)->
+      @element.transform "t #{x}, #{y}"
       @
 
     snapTo : (el)=>
