@@ -1,7 +1,7 @@
 require.config
   paths:
     Snap:       "../vendor/Snap.svg/dist/snap.svg"
-    DropZone:   "./scripts/DropZone"
+    DropArea:   "./scripts/DropArea"
     Handler:    "./scripts/Handler"
     Path:       "./scripts/Path"
     Field:      "./scripts/Field"

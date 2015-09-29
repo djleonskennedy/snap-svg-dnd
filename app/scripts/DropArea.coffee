@@ -1,5 +1,5 @@
 define ['Snap'], (Snap)->
-  class DropZone
+  class DropArea
     constructor: (@element, pivotVisualiser)->
 
       #if visualizes is provided it'll help to see where pivot point is
@@ -7,7 +7,7 @@ define ['Snap'], (Snap)->
 
       @element.addClass('drop-zone')
 
-      #pivot point for snap hanlder to this DropZone
+      #pivot point for snap hanlder to this DropArea
       @pivot = px: 0, py: 0
 
       @draw 0, 0
@@ -31,7 +31,7 @@ define ['Snap'], (Snap)->
 
     #throw messages for class
     messages =
-      pivotErr : "DropZone module: ERROR ! 'pivotVisualizer' is not defined, please provide svg element to use this functionality"
+      pivotErr : "DropArea module: ERROR ! 'pivotVisualizer' is not defined, please provide svg element to use this functionality"
 
     showPivot: ->
       if @_pivotVisualizer? then @_pivotVisualizer.attr(opacity: 1) else throw Error messages.pivotErr
