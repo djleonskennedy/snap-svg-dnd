@@ -1,0 +1,19 @@
+{
+  "name": "snap",
+  "version": "0.0.0",
+  "authors": [
+    "Yuriy Yakovenko <yuriy.yakovenko@infopulse.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Snap.svg": "snap.svg#~0.4.1",
+    "requirejs": "~2.1.20"
+  }
+}
