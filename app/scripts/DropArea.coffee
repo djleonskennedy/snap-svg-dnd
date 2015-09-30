@@ -2,6 +2,8 @@ define ['Snap'], (Snap)->
   class DropArea
     constructor: (@element, pivotVisualiser)->
 
+      @assignedTo = null
+
       #if visualizes is provided it'll help to see where pivot point is
       @_pivotVisualizer = pivotVisualiser if pivotVisualiser?
 
