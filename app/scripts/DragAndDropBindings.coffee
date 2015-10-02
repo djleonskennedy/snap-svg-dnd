@@ -16,11 +16,14 @@ define [], ()->
 
     _range : (val, min, max) -> val >= min and val <= max
 
+
+
     _requestDropZone: ( handler )->
       _el = @_parseCoords handler
       for port in @dragAreas
         _port = @_parseCoords port
         if @_range(_el.cx, _port.x, _port.x + _port.w ) and @_range(_el.cy, _port.y, _port.y + _port.h )
+          console.log "DROP ZONE IS HERE :)"
           console.log "connected", handler, " to ", port
           break
         else 
