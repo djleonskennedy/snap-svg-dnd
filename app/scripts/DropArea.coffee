@@ -14,7 +14,6 @@ define ['Snap'], (Snap)->
 
       @draw 0, 0
 
-
     draw: (x, y)->
       @element.transform "t #{x} #{y}"
       @_pivotVisualizer?.transform "t #{x + @pivot.px} #{y + @pivot.py}"
