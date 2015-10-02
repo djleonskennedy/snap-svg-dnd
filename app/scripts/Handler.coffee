@@ -1,7 +1,9 @@
 define [], ->
   class Handler
     constructor: (@element)->
+
       @_initialCoordsString = null
+
       @assignedTo = null
 
       #apply classes for handler

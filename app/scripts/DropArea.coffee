@@ -1,5 +1,9 @@
 define ['Snap'], (Snap)->
   class DropArea
+
+    messages =
+      pivotErr : "DropArea module: ERROR ! 'pivotVisualizer' is not defined, please provide svg element to use this functionality"
+
     constructor: (@element, pivotVisualiser)->
 
       @assignedTo = null
@@ -17,6 +21,9 @@ define ['Snap'], (Snap)->
     draw: (x, y)->
       @element.transform "t #{x} #{y}"
       @_pivotVisualizer?.transform "t #{x + @pivot.px} #{y + @pivot.py}"
+      @pivot =
+        px: x + @pivot.px
+        py: y + @pivot.py
       @
 
     moveTo: (coords)->
@@ -29,10 +36,6 @@ define ['Snap'], (Snap)->
       @pivot.py = _el.y + y
       @_pivotVisualizer?.transform "t #{@pivot.px } #{@pivot.py }"
       @
-
-    #throw messages for class
-    messages =
-      pivotErr : "DropArea module: ERROR ! 'pivotVisualizer' is not defined, please provide svg element to use this functionality"
 
     showPivot: ->
       if @_pivotVisualizer? then @_pivotVisualizer.attr(opacity: 1) else throw Error messages.pivotErr
