@@ -1,12 +1,18 @@
 define [], ()->
   class DragAndDropBindings
     constructor: ()->
-      @dragAreas = []
+
+      @ports = []
       @handlers = []
+
+      @locked = off
+
+      #events
+      @onAllConnected = null
 
     registerArea: (dropArea)->
       dropArea.assignedTo = @
-      @dragAreas.push dropArea
+      @ports.push dropArea
 
     registerHandler: (handler)->
       handler.assignedTo = @
@@ -18,16 +24,38 @@ define [], ()->
 
     _requestDropZone: ( handler )->
       _el = @_parseCoords handler
-      for port in @dragAreas
+      for port in @ports
         _port = @_parseCoords port
-        if @_range(_el.cx, _port.x, _port.x + _port.w ) and @_range(_el.cy, _port.y, _port.y + _port.h )
-          console.log "DROP ZONE IS HERE :)"
-          handler.snapTo port
-          break
-        else 
-          console.log "DROP ZONE IS NOT HERE :("
+        if @_range(_el.cx, _port.x, _port.x + _port.w ) and @_range(_el.cy, _port.y, _port.y + _port.h)
+          return port
+
+    _connectionManager : ( handler, port )->
+      unless port?
+        @ports.forEach (_port)-> _port.handler = null if _port.handler is handler
+      else
+        unless port.handler?
+          unless handler.port?
+            port.handler = handler
+            handler.snapTo port
+            handler.port = port
+          else
+            handler.port.handler = null if handler is handler.port.handler
+            port.handler = handler
+            handler.snapTo port
+            handler.port = port
+        else
+          unless handler is port.handler
+            handler.draw handler.lastPositionCoords.x, handler.lastPositionCoords.y
+          else
+            handler.snapTo port
+      do @_checkConnections
+
+    _checkConnections: ->
+      if @ports.length > 0
+        check = @ports.every (port)-> port.handler isnt null
+        do @onAllConnected if check
 
     bindComponents: ->
       @handlers.forEach (handler)=>
         handler.onHandlerStop = ()=>
-          @_requestDropZone handler
+          @_connectionManager handler, @_requestDropZone(handler)

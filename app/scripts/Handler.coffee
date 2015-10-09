@@ -2,7 +2,7 @@ define [], ->
   class Handler
     constructor: (@element)->
 
-      @_initialCoordsString = null
+      @lastPositionCoords = null
 
       @assignedTo = null
 
@@ -24,12 +24,17 @@ define [], ->
       @onHandlerStop = null
       @onHandlerMove = null
 
+    returnToInitialPosition:-> @draw @_initialCoords.x, @_initialCoords.y
+
     draw:(x, y)->
       @element.transform "t #{x}, #{y}"
       @
 
     snapTo : (el)=>
       @element.transform "t #{el.pivot.px} #{el.pivot.py}"
+      @lastPositionCoords =
+        x: el.pivot.px
+        y: el.pivot.py
       @
 
     _start: (x, y) =>
@@ -44,9 +49,9 @@ define [], ->
       do @onHandlerStart if @onHandlerStart?
 
       #save coords for "return to start" functionality
-      @initialCoordsString =
-        x: @element.getBBox().x
-        y: @element.getBBox().y
+      @lastPositionCoords =
+        x: @element.getBBox().cx
+        y: @element.getBBox().cy
 
     _stop:()=>
       @draw @_initialCoordsString if @returnToStart

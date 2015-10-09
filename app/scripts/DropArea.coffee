@@ -5,8 +5,7 @@ define ['Snap'], (Snap)->
       pivotErr : "DropArea module: ERROR ! 'pivotVisualizer' is not defined, please provide svg element to use this functionality"
 
     constructor: (@element, pivotVisualiser)->
-
-      @assignedTo = null
+      @handler = null
 
       #if visualizes is provided it'll help to see where pivot point is
       @_pivotVisualizer = pivotVisualiser if pivotVisualiser?
