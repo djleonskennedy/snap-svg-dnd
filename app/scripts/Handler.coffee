@@ -1,14 +1,14 @@
 define [], ->
   class Handler
-    constructor: (@element)->
+    constructor: (@element, handlerArea, handlerVisible)->
 
       @lastPositionCoords = null
-
-      @assignedTo = null
+      @assignedTo         = null
+      @currentPosition    = null
 
       #apply classes for handler
-      @element[1].addClass('handler-area')
-      @element[0].addClass('handler-visible')
+      @element[0].addClass(if handlerVisible? then handlerVisible else 'handler-visible')
+      @element[1].addClass(if handlerArea? then handlerArea else'handler-area')
 
       #apply drag functionality
       @element.drag @_move, @_start, @_stop
@@ -21,20 +21,31 @@ define [], ->
 
       #events
       @onHandlerStart = null
-      @onHandlerStop = null
-      @onHandlerMove = null
+      @onHandlerStop  = null
+      @onHandlerMove  = null
+      @onHandlerSnap = null
 
     returnToInitialPosition:-> @draw @_initialCoords.x, @_initialCoords.y
 
     draw:(x, y)->
       @element.transform "t #{x}, #{y}"
+      @currentPosition =
+        cx: x
+        cy: y
       @
 
     snapTo : (el)=>
       @element.transform "t #{el.pivot.px} #{el.pivot.py}"
+
       @lastPositionCoords =
         x: el.pivot.px
         y: el.pivot.py
+
+      @currentPosition =
+        cx: el.pivot.px
+        cy: el.pivot.py
+
+      do @onHandlerSnap if @onHandlerSnap?
       @
 
     _start: (x, y) =>
@@ -60,8 +71,9 @@ define [], ->
       do @onHandlerStop if @onHandlerStop?
 
     _move: (dx, dy) =>
-      # using transform for thouchy screens devices
+      @currentPosition = @element.getBBox() if @onHandlerMove?
 
+      # using transform for thouchy screens devices
       if typeof dx == 'object' and dx.type == 'touchmove'
         changedTouches = dx.changedTouches[0]
         dx = changedTouches.clientX - @element.data('ox')
