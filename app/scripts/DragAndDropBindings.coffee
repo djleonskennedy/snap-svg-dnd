@@ -34,15 +34,11 @@ define [], ()->
         @ports.forEach (_port)-> _port.handler = null if _port.handler is handler
       else
         unless port.handler?
-          unless handler.port?
-            port.handler = handler
-            handler.snapTo port
-            handler.port = port
-          else
+          if handler.port?
             handler.port.handler = null if handler is handler.port.handler
-            port.handler = handler
-            handler.snapTo port
-            handler.port = port
+          port.handler = handler
+          handler.snapTo port
+          handler.port = port
         else
           unless handler is port.handler
             handler.draw handler.lastPositionCoords.x, handler.lastPositionCoords.y
@@ -53,7 +49,7 @@ define [], ()->
     _checkConnections: ->
       if @ports.length > 0
         check = @ports.every (port)-> port.handler isnt null
-        do @onAllConnected if check
+        do @onAllConnected if check and @onAllConnected?
 
     bindComponents: ->
       @handlers.forEach (handler)=>
